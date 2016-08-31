@@ -3,7 +3,6 @@ from datetime import datetime, date, time
 from cStringIO import StringIO
 from PIL import Image
 import time as ttime
-import csv
 
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
@@ -12,7 +11,7 @@ from django.core.urlresolvers import reverse
 from django.db.models.fields import AutoField
 from django.template.loader import render_to_string
 from django.utils.encoding import smart_str
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext
 
 from tendenci.apps.directories.models import Directory, DirectoryPricing
 from tendenci.apps.invoices.models import Invoice
@@ -62,9 +61,9 @@ def get_duration_choices(user):
 
 def get_payment_method_choices(user):
     if user.profile.is_superuser:
-        return (('paid - check', _('User paid by check')),
-                ('paid - cc', _('User paid by credit card')),
-                ('Credit Card', _('Make online payment NOW')),)
+        return (('paid - check', gettext('User paid by check')),
+                ('paid - cc', gettext('User paid by credit card')),
+                ('Credit Card', gettext('Make online payment NOW')),)
     else:
         directory_payment_types = get_setting('module', 'directories', 'directoriespaymenttypes')
         if directory_payment_types:

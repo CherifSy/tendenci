@@ -266,12 +266,6 @@ class DirectoryForm(TendenciBaseForm):
                 logo = None
 
         return logo
-    
-    def clean_headline(self):
-        """
-        remove extra leading and trailing white spaces
-        """
-        return self.cleaned_data.get('headline', '').strip()
 
     def clean_headline(self):
         """
@@ -298,7 +292,7 @@ class DirectoryForm(TendenciBaseForm):
             if 'status_detail' in self.fields: self.fields.pop('status_detail')
 
         if self.fields.has_key('payment_method'):
-            self.fields['payment_method'].widget = forms.RadioSelect(choices=get_payment_method_choices(self.user))
+            self.fields['payment_method'] = forms.ChoiceField(widget=forms.RadioSelect, choices=get_payment_method_choices(self.user))
         if self.fields.has_key('pricing'):
             self.fields['pricing'].choices = get_duration_choices(self.user)
 

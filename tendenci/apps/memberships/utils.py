@@ -17,7 +17,6 @@ from django.template.defaultfilters import slugify
 from django.db.models import Q
 from django.core.files.storage import default_storage
 from django.core import exceptions
-from django.utils.safestring import mark_safe
 from django.utils.encoding import smart_str
 from django.db.models.fields import AutoField
 from django.db.models import ForeignKey, OneToOneField
@@ -34,7 +33,7 @@ from tendenci.apps.memberships.models import (MembershipType,
                                                 MembershipAppField,
                                                 MembershipFile,
                                                 VALID_MEMBERSHIP_STATUS_DETAIL)
-from tendenci.apps.base.utils import normalize_newline, UnicodeWriter, tcurrency
+from tendenci.apps.base.utils import normalize_newline, UnicodeWriter
 from tendenci.apps.profiles.models import Profile
 from tendenci.apps.profiles.utils import make_username_unique, spawn_username
 from tendenci.apps.emails.models import Email
@@ -1478,6 +1477,10 @@ class ImportMembDefault(object):
             profile.status_detail = 'active'
         else:
             profile.status_detail = profile.status_detail.lower()
+        
+        # this is membership import - the 'expired' status_detail shouldn't be assigned to profile   
+        if profile.status_detail == 'expired':
+            profile.status_detail = 'active'
 
         if profile.status_detail == 'active' and not profile.status:
             profile.status = True
